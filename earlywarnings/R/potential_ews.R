@@ -198,7 +198,7 @@ livpotential_ews <- function(x, std = 1, bw = "nrd", weights = c(), grid.size = 
 #'
 #' @keywords utilities
 
-find.optima <- function(f, detection.threshold = 0, bw, detection.limit = 1) {
+find.optima <- function(f, detection.threshold = 0.005, bw, detection.limit = 5) {
    
     # multiple of kernel height 
     kernel.height <- dnorm(0, sd = bw) / length(f) 
@@ -383,9 +383,9 @@ remove_obsolete_minima <- function (f, maxima, minima) {
 #'	     res <- movpotential_ews(X, param)
 #' @keywords early-warning
 
-movpotential_ews <- function(X, param = NULL, bw = "nrd", bw.adjust = 1, detection.threshold = 0.1, 
+movpotential_ews <- function(X, param = NULL, bw = "nrd", bw.adjust = 1, detection.threshold = 1, 
     std = 1, grid.size = 50, plot.cutoff = 0.5, plot.contours = TRUE, binwidth = 0.2, 
-    bins = NULL) {
+    bins = NULL, detectlim = 1) {
     
     if (is.null(param)) {
         param <- seq(1, length(X), 1)
@@ -424,7 +424,7 @@ movpotential_ews <- function(X, param = NULL, bw = "nrd", bw.adjust = 1, detecti
         
         # Calculate the potential
         tmp <- livpotential_ews(x = X, std = std, bw = bw, bw.adjust = bw.adjust, 
-            weights = weights, grid.size = grid.size)
+            weights = weights, grid.size = grid.size, detection.limit = detectlim)
         
         # Store variables
         pots[i, ] <- tmp$pot
